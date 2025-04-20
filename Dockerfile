@@ -1,26 +1,32 @@
-# Use an OpenJDK base image
-FROM openjdk:21-jdk-slim
+# Build stage
+FROM openjdk:21-jdk-slim AS build
 
-# Set the working directory inside the container
+# Set working directory
 WORKDIR /app
 
-# Copy the entire project to the container
-COPY . .
+# Copy source files
+COPY src/ ./src/
 
-# Create a directory for compiled classes
+# Create output directory
 RUN mkdir -p out
 
-# Compile the Java source files
-RUN javac -d out src/com/zetcode/*.java
+# Compile Java files
+RUN find src -name "*.java" > sources.txt && javac -d out @sources.txt
 
-# Copy resources into the out directory so the app can access them at runtime
-RUN cp -r resources out/
+# Copy resources to output directory
+RUN cp -r src/resources out/
 
-# Set working directory to the compiled output
+# Runtime stage
+FROM openjdk:21-jdk-slim
+
+# Set working directory for runtime
+WORKDIR /app
+
+# Copy compiled classes and resources from build stage
+COPY --from=build /app/out /app/out
+
+# Set working directory to compiled output
 WORKDIR /app/out
 
-# Expose port if needed (not mandatory for a desktop-like app, unless you're serving it over RMI/sockets)
-# EXPOSE 8080
-
-# Command to run the application (assuming Snake.java has the main method)
+# Command to run the application
 CMD ["java", "com.zetcode.Snake"]
