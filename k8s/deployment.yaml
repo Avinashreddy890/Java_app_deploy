@@ -14,6 +14,6 @@ spec:
     spec:
       containers:
       - name: myapp
-        image: avinash200374/myapp
+        image: avinash200374/myapp:latest
         ports:
         - containerPort: 8081
