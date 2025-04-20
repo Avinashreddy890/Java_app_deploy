@@ -14,6 +14,6 @@ spec:
     spec:
       containers:
       - name: myapp
-        image: avinash200374/myapp:latest
+        image: sravan614/mmyappp:tagname
         ports:
         - containerPort: 8081
