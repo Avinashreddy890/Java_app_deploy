@@ -15,5 +15,6 @@ spec:
       containers:
       - name: myapp
         image: avinash200347/myapp:latest
+        imagePullPolicy: Always
         ports:
         - containerPort: 8081
